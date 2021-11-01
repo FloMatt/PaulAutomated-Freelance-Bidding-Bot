@@ -1,3 +1,4 @@
+# Imports of prgram dependencies. Everyone of these is used somewhere
 import random
 import time
 from tkinter import *
@@ -25,6 +26,7 @@ original_order_id_list = []
 unbid_new = []
 unneeded_subject_list = []  # ['Criminal Law', 'History', 'Management', 'Human Resource Management']
 
+#This section is was used in develpoment to minimize the time taken to re-run the application. Hard-coded inputs
 '''
 on_revision = 0
 slides_checked = 1
@@ -56,13 +58,13 @@ pages_min = 1  #
 pages_max = 1808  #
 '''
 # *************************************************************
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Major sections divided using such comments, haha
 
-
+# Tkinter function testing function
 def btn_clicked():
     print("Button Clicked")
 
-
+# Adding aesthetic appeal to the output 
 def all_output():
     for tr in all_s:
         output.insert(INSERT, ":ǀ------------Applied----------------ǀ")
@@ -107,13 +109,11 @@ def start_writedom():
 
 
 # *************************************************************
-# Search the website and log in
-pp = []
-
-
+# Search the website and log in function
+pp = [] # these variables are used to control immediate functions ...
+# ...they are decalred globally because they are used to control state elsewhere
 def launch():
     if __name__ == '__main__':
-
         try:
             browser.get('https://writedom.com/dashboard/')
             time.sleep(2)
@@ -154,6 +154,7 @@ def launch():
         except Exception as e:
             print("Access Error: ", e)
             ''''
+            # this part checks whether the login was sucessful. Got a bug here, will be fixed
             time.sleep(18)
             try:
                 b = browser.find_element_by_class_name('page-title').text
@@ -169,10 +170,8 @@ def launch():
                 return
             '''
 
-# This make sure that the chat box is closed
-# it also ensures that maximum number or orders are on screen
-
-
+# This make sure that the chat box that sometimes pop up upon login is closed
+# it also ensures that maximum number or orders are selected for display on screen
 def all_orders_fn():
     print("Minimize the chat box")
     time.sleep(2)
@@ -195,11 +194,13 @@ def all_orders_fn():
         pass
     except Exception:
         pass
-    print("ALL SYSTEM GO")
+    print("ALL SYSTEM GO") # 
     # order_listener()
 
 
-# CHeck for anormalies
+# CHeck for anormalies.
+# This is all the possible screens that a user can click while the user is under the bot control
+# This bot can detect this and take back control and return to the orders page
 what = [1, 2, 5]
 freeze = []
 away_from_orders_options_list = ['Help Needed', 'In Progress',
@@ -209,11 +210,11 @@ away_from_orders_options_list = ['Help Needed', 'In Progress',
                                  'Available Orders']
 
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# Boolean check of internet connection
+# Boolean check of internet connection and will only return when the internet is back. Recursion with variable timing
+# The bot can only start if there is an internet connection
+# This functions is also called during some lag senarios to check if internet is still available
 net_timer = []
 net_timer_delay = []
-
-
 def is_connected():
     net = False
     try:
@@ -246,7 +247,7 @@ def is_connected():
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 def what_is_happening():
-    # Check for hearder in the page
+    # Check for hearder in the page to ensure that it is on the right page at the right time
     try:
         available_orders_header = browser.find_element_by_xpath(
             '//*[@id="root"]/div/div/div/div[1]/div/main/div/div/h3').text
@@ -290,9 +291,9 @@ def what_is_happening():
 
 
 # __________________________________________
+# this function checks the internet before the bot starts
+# it is separate because it does not have recusrion as it only checks onece. 
 ss = []
-
-
 def first_is_connected():
     try:
         # connect to the host -- tells us if the host is actually
@@ -315,10 +316,12 @@ er0 = []
 er1 = []
 
 
+# This function checks the order number and if it is available
+# It cycles through untill available for a max of 100 times before returning force and removing the order from the bid list
+# If the order is available it clicks to open it and return true
 def dom_0(order_2):  # cliick on orders
     try:
         print("here 0")
-        # 000000000000000000000000000000000000
         k_0 = 'PawaWritedomBot'
         # check if the order numbers match
         for _ in itertools.cycle(k_0):
@@ -335,7 +338,7 @@ def dom_0(order_2):  # cliick on orders
                 er0.append(0)
                 is_connected()
                 what_is_happening()
-                if len(er0) < 100:  # loop for 700 times looking for the order
+                if len(er0) < 100:  # loop for 100 times looking for the order
                     continue
                 else:
                     er0.clear()
@@ -346,7 +349,6 @@ def dom_0(order_2):  # cliick on orders
                 break
                 # Check if order is still available
             continue
-        # 00000000000000000000000000000000000
     except Exception as e:
         print("Error 00: ", e)
 
@@ -354,9 +356,10 @@ def dom_0(order_2):  # cliick on orders
     return False
 
 
+# This function Checks to see if the page is ready to start bidding
+# Sometimes the pages don't load when clicked and that can cause problems - this is an inherent nature of the website
+# it waits for 20 seconds two times before returning false. It does not discard the order because it is still available
 ern = []
-
-
 def dom_1(order_2):  # click apply
     print("here 1")
     try:  # look for the "Order info" tag on orders
@@ -388,6 +391,8 @@ def dom_1(order_2):  # click apply
     return False
 
 
+# This functions checks if the order is on revision or normal.
+# It helps in filtering of the orders that are on revision. They are kinda hard, haha. 
 def status_check(order_2):
     status = ''
     try:
@@ -410,10 +415,11 @@ def status_check(order_2):
     return False
 
 
+# This is where the "Apply" button is clicked. It handles all the other scenarios 
+# Return true only when the apply bid has been clicked. 
 def dom_11(order_2):
     print("here 11")
-    # 1111111111111111111111111111111
-    k_1 = 'PawaWritedomBot'
+    k_1 = 'PaulPawaWritedomBot'
     y = ''
     yy = ''
     for _ in itertools.cycle(k_1):
@@ -460,7 +466,7 @@ def dom_11(order_2):
         except Exception:
             pass
 
-    elif y or yy == 'Assigned!':  # if not available
+    elif y or yy == 'Assigned!':  # if You already has the order assigned to you
         print(order_2, " -> Assigned!")
         all_orders.append(order_2)
         try:
@@ -484,7 +490,7 @@ def dom_11(order_2):
             pass
 
     else:
-        all_orders.append(order_2)
+        all_orders.append(order_2) # Sometimes this happens, I don't know why but I had to handle the exception
         print("Where are we? Haha!")
         try:
             browser.find_element_by_xpath(
@@ -497,6 +503,8 @@ def dom_11(order_2):
     return False
 
 
+# This is the function called to return to home to continue with the bidding.
+# The website does not open other tabs when you click on orders. It stacks them, and this function ensures that we go back to home.
 def dom_2():  # Click Available order and return to all orders
     # check if the window size is okay
     size = browser.get_window_size()
@@ -524,6 +532,9 @@ def dom_2():  # Click Available order and return to all orders
     return False
 
 
+# This function is called when the page freezes due to messages from the support or unconfirmed assigned orders
+# The page is not navigatable when in this state. To prevent recursion depth being reached, this function...
+#... helps to make the program idle untill someone responds to the messages which unfreezes the site. Very crucial
 def idling():
     print("Idling...")
     hed = ''
@@ -542,7 +553,9 @@ def idling():
     main()
 
 
-# 999999999999999999999999999999999999999999999999999
+# This function checks the level of education for the order.
+# it is called for every order to check.
+# IT helps in filtering complex, phD, etc orders out
 def complexity(one_order, level):
     if level == 'H' and one_order not in all_orders:
         if Button_h.get() == 1:
@@ -591,12 +604,9 @@ def complexity(one_order, level):
     return
 
 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-
-# pages check ***************************************************
-
-
+# pages of the order checking for filtering ***************************************************
+# referenced in the GUI
+# Also checks for slides, problems, and Questions
 def with_pages(one_order, pg):
     # pg = int(pg)
     if min_pages.get() <= pg <= max_pages.get():
@@ -645,9 +655,8 @@ def other_pages(one_order, slides, problems, questions):
     return
 
 
-# Price***********************************************************
 
-
+# Price check for filtering ***********************************************************
 def cpp_calculator(one_order, prc):
     bid_price = 0
     price_1 = prc.split('$')
@@ -665,14 +674,15 @@ def cpp_calculator(one_order, prc):
     return bid_price
 
 
-# Deadline*********************************************************
+# Deadline Check for filtering *********************************************************
+# Here I had to be creative and split the strings and map each corresponsing time to a known time correctly transformed
 def time_calculator(one_order, ddline, time_min, time_max):
     bid_time = 0
     actual_time = 1
     # deadline = '1 day 22 hours'
     result_d = ddline.find('day')  # checking for days
-    result_h = ddline.find('hour')
-    result_m = ddline.find('min')
+    result_h = ddline.find('hour') # Checking for dours
+    result_m = ddline.find('min') # Checking for minutes
     res = [int(i) for i in ddline.split() if i.isdigit()]
     # print(res)
     if result_d > 0:  # day present
@@ -706,7 +716,7 @@ def time_calculator(one_order, ddline, time_min, time_max):
             pass
     else:
         pass
-    # removing any order with
+    # Actual filtering using the range provided
 
     if time_min < actual_time < time_max:  # when order deadline is less than what is wanted
         if one_order not in original_order_id_list:
@@ -719,6 +729,7 @@ def time_calculator(one_order, ddline, time_min, time_max):
     return bid_time
 
 
+# Check the subjet for the order
 def subject_check(one_order, subject, unwanted_list):
     subject = subject[1:]
     bid_sub = 0
@@ -733,11 +744,10 @@ def subject_check(one_order, subject, unwanted_list):
     return bid_sub
 
 
-# *********************************************************************
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# This section contains tha main controls of the program from where all the activities are controlled
 # global df
 qw = []
-
 
 def main():
     global all_orders
@@ -760,11 +770,9 @@ def main():
             '/html/body/div[3]/div/div/div/div[1]/div/nav/div/a[6]/div/span/div/div/div[2]').click()
     except Exception:
         pass
-    # $$$$$$$$$$$$$$$$$$$
 
-    while w < 2 ** 20:
+    while w < 2 ** 20: # THis is the main while loop for the fucntion. Preffered over a function because of recurrsion limit and performance
         # ------------------------------------------------------
-        # 111111111111111111111111111111111111111111
         output.clear()
         input_or = []
         try:
@@ -823,7 +831,7 @@ def main():
             if pages and slides and problems and questions ==0 and price == '': 
                 main()
 
-                
+            # THis is where all the functions calls that happens conditionaly and progressively.
             if one_order not in all_orders:
                 subject_check(one_order, subject, unneeded_subject_list)
 
@@ -855,11 +863,12 @@ def main():
             else:
                 # what_is_happening()
                 pass
+            # When a false is returned at any point, the program will abort and pass every other stage to the deafult state
 
-        original_order_id_list = list(set(sorted(original_order_id_list)))
+        original_order_id_list = list(set(sorted(original_order_id_list))) # This is the list of a sorted set that stores that orders that are to be bid are stored. 
         all_orders = list(set(sorted(all_orders)))
         # this compares two list original is the instantaneous and all orders is where all bid
-        unbid_new = [x for x in original_order_id_list + all_orders if x not in all_orders]
+        unbid_new = [x for x in original_order_id_list + all_orders if x not in all_orders] # Compare the list with the unwanted list, or bidded list
 
         # ------------------------
         # this compares two list original is the instantaneous and all orders is where all bid
@@ -890,7 +899,6 @@ def main():
                         time.sleep(2)
                         break
                 elif header == 'Messages':
-                    # 2222222222222222222222222222
                     # Looking for the confirm order page in first 4 rows
                     qw.append(4)
                     if len(qw) < 5:
@@ -925,7 +933,6 @@ def main():
                     else:
                         qw.clear()
                         print("Assigned Order")
-                    # 222222222222222222222222222222222
                 else:
                     try:  # click available orders
                         browser.find_element_by_xpath('//*[@id="SideNavBar"]/div/a[6]/div/span/div/span').click()
@@ -980,7 +987,7 @@ global min_price, max_price, \
 
 f = 0
 
-
+# THis is an color animator for the output screen that is only called when the bot is running
 def output_animator():
     colors = ['#7FFFD4', '#454B1B', '#088F8F',
               '#AAFF00', '#5F9EA0', '#097969',
@@ -997,11 +1004,16 @@ def output_animator():
         time.sleep(0.41)
 
 
+# This is GUI point of entry to the program. Called when the start button is clicked
+# It creates a thread that runs parallel to the GUI to prevent interference of the prgram by the looping GUI function
 def start_clicked_0():
 
     threading.Thread(target=start_clicked).start()
 
 
+# this is the condional check of the GUI and the program requirements
+# Generally checks everything is in order logically
+# example, minimum budget should not be more than maximum budget, etc
 def start_clicked():
 
     selected_collector()
@@ -1040,6 +1052,7 @@ def start_clicked():
     main()
 
 
+# handle the "STOP" button function on the close. It alerts first before closing
 def on_closing():
     if messagebox.askokcancel("Pawa Bidding Bot", "Do you want to quit \nand close the browser?"):
         window.destroy()
@@ -1047,12 +1060,11 @@ def on_closing():
             browser.quit()
         except Exception:
             pass
+        
+        
+# This is the Tkinter code below
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 window = Tk()
-
-
 window.geometry("879x650")
 window.configure(bg="#dce1ed")
 # icon = PhotoImage(file = 'pawa icon.ico')
@@ -1302,6 +1314,10 @@ btn1 = Button(second_list, text="Get Selected", command=selected_collector, bg=b
 # first_list.insert(END,btn)
 btn.pack(side=TOP)
 # btn1.pack(side=BOTTOM)
+
+
+# The time I made the bot, this is what I knew best. Proud of it but there are other ways to solve this now for me
+
 
 # Button_select_all = Checkbutton(first_list, text="Select All", variable=Checkbutton_select_all, onvalue=1, offvalue=0, bg=btn_bg, command=select_all)
 Button1 = Checkbutton(first_list, text="Accounting", variable=Checkbutton1, onvalue=1, offvalue=0, bg=btn_bg)
